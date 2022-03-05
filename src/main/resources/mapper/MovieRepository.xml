@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.edu.ecnu.repository.MovieRepository" >
+
+    <resultMap id="BaseResultMap" type="cn.edu.ecnu.model.dataobject.MovieDO" >
+        <id column="teamid" property="teamid" jdbcType="VARCHAR" />
+        <result column="teamname" property="teamname" jdbcType="VARCHAR" />
+<!--        <collection property="students" ofType="cn.edu.ecnu.domain.Student">-->
+<!--            <id column="sid" property="sid" jdbcType="VARCHAR" />-->
+<!--            <result column="email" property="email" jdbcType="VARCHAR" />-->
+<!--            <result column="sex" property="sex" jdbcType="BIT" />-->
+<!--            <result column="department" property="department" jdbcType="VARCHAR" />-->
+<!--            <result column="username" property="username" jdbcType="VARCHAR" />-->
+<!--        </collection>-->
+<!--        <collection property="projects" ofType="cn.edu.ecnu.domain.Project">-->
+<!--            <id column="pid" property="pid" jdbcType="VARCHAR" />-->
+<!--            <result column="projectname" property="projectname" jdbcType="VARCHAR" />-->
+<!--            <result column="description" property="description" jdbcType="VARCHAR" />-->
+<!--            <result column="type" property="type" jdbcType="VARCHAR" />-->
+<!--            <result column="stage" property="stage" jdbcType="INTEGER" />-->
+<!--            <result column="midmark" property="midmark" jdbcType="INTEGER" />-->
+<!--            <result column="finalmark" property="finalmark" jdbcType="INTEGER" />-->
+<!--            <result column="advisorid" property="advisorid" jdbcType="VARCHAR" />-->
+<!--            <result column="teamid" property="teamid" jdbcType="VARCHAR" />-->
+<!--        </collection>-->
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+        t.teamid, teamname, s.sid, email, sex, department, username, pid, projectname, description, type, stage, midmark, finalmark, advisorid
+    </sql>
+    
+    <insert id="insertBatchMovies" parameterType="java.util.List">
+        INSERT INTO movie(
+        title, url, cover, length, rate, showtime, actor,
+        director, language, district, category, composer, othername
+        )
+        VALUES
+        <foreach item="movie" collection="list" index="idx" open="" separator="," close="">
+            (#{movie.title, jdbcType=VARCHAR},
+            #{movie.url, jdbcType=VARCHAR},
+            #{movie.cover, jdbcType=VARCHAR},
+            #{movie.length, jdbcType=INTEGER},
+            #{movie.rate, jdbcType=DOUBLE},
+            #{movie.showtime, jdbcType=INTEGER},
+            #{movie.actor, jdbcType=VARCHAR},
+            #{movie.director, jdbcType=VARCHAR},
+            #{movie.language, jdbcType=VARCHAR},
+            #{movie.district, jdbcType=VARCHAR},
+            #{movie.category, jdbcType=VARCHAR},
+            #{movie.composer, jdbcType=VARCHAR},
+            #{movie.othername, jdbcType=VARCHAR})
+        </foreach>
+
+    </insert>
+
+</mapper>
