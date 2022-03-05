@@ -15,7 +15,7 @@ public class MovieService {
 
     public Movie queryMovieInfoByMovieId(Integer id) {
         MovieDO movieDO = movieRepository.selectMovieById(id);
-        Movie movie = MovieConvertor.convertDOtoEntity(movieDO);
+        Movie movie = MovieConvertor.convertDOToEntity(movieDO);
         return movie;
     }
 }

@@ -25,9 +25,17 @@
 <!--        </collection>-->
     </resultMap>
 
-    <sql id="Base_Column_List" >
-        t.teamid, teamname, s.sid, email, sex, department, username, pid, projectname, description, type, stage, midmark, finalmark, advisorid
+    <sql id="Movie_Column_List" >
+        title, url, cover, length, rate, showtime, actor,
+        director, language, district, category, composer, othername
     </sql>
+
+    <select id="selectMovieById" parameterType="java.lang.Integer" resultType="cn.edu.ecnu.model.dataobject.MovieDO" >
+        SELECT
+        <include refid="Movie_Column_List" />
+        FROM movie
+        WHERE id = #{id}
+    </select>
     
     <insert id="insertBatchMovies" parameterType="java.util.List">
         INSERT INTO movie(
