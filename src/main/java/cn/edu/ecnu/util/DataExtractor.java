@@ -30,6 +30,7 @@ public class DataExtractor {
             List<MovieDO> movieDOS = new ArrayList<>();
             for (Movie movie : movies) {
                 MovieDO movieDO = MovieConvertor.convertEntityToDO(movie);
+                movieDO.setTitle(movie.getTitle().replaceAll("\"", ""));
                 /* 提取封面中的 cover_id */
                 if (StringUtils.isBlank(movie.getCover())) {
                     continue;
