@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.edu.ecnu.repository.DirectRepository" >
+
+    <insert id="insertBatchDirect" parameterType="java.util.List">
+        INSERT INTO direct(
+            director_id, movie_id
+        )
+        VALUES
+        <foreach item="direct" collection="list" index="idx" open="" separator="," close="">
+            (#{direct.directorId, jdbcType=INTEGER},
+            #{direct.movieId, jdbcType=INTEGER})
+        </foreach>
+
+    </insert>
+
+</mapper>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.edu.ecnu.repository.ActRepository" >
+
+    <insert id="insertBatchAct" parameterType="java.util.List">
+        INSERT INTO act(
+            actor_id, movie_id
+        )
+        VALUES
+        <foreach item="act" collection="list" index="idx" open="" separator="," close="">
+            (#{act.actorId, jdbcType=INTEGER},
+            #{act.movieId, jdbcType=INTEGER})
+        </foreach>
+
+    </insert>
+
+</mapper>

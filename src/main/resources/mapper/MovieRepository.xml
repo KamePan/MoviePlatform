@@ -8,6 +8,40 @@
         <result column="url" property="url" jdbcType="VARCHAR" />
         <result column="cover" property="cover" jdbcType="VARCHAR" />
         <result column="length" property="length" jdbcType="INTEGER" />
+        <result column="showtime" property="showtime" jdbcType="INTEGER" />
+        <result column="composer" property="composer" jdbcType="VARCHAR" />
+        <result column="district" property="district" jdbcType="VARCHAR" />
+        <result column="language" property="language" jdbcType="VARCHAR" />
+        <result column="desc" property="desc" jdbcType="VARCHAR" />
+    </resultMap>
+
+    <resultMap id="MovieBindActorDirectorResultMap" type="cn.edu.ecnu.model.dataobject.MovieDO" >
+        <id column="movie_id" property="id" jdbcType="INTEGER" />
+        <result column="title" property="title" jdbcType="VARCHAR" />
+        <result column="url" property="url" jdbcType="VARCHAR" />
+        <result column="cover" property="cover" jdbcType="VARCHAR" />
+        <result column="length" property="length" jdbcType="INTEGER" />
+        <result column="showtime" property="showtime" jdbcType="INTEGER" />
+        <result column="composer" property="composer" jdbcType="VARCHAR" />
+        <result column="district" property="district" jdbcType="VARCHAR" />
+        <result column="language" property="language" jdbcType="VARCHAR" />
+        <result column="movie_desc" property="desc" jdbcType="VARCHAR" />
+        <collection property="actorDOS" javaType="java.util.List" ofType="cn.edu.ecnu.model.dataobject.DirectorDO">
+            <id column="actor_id" property="id"/>
+            <result column="actor_name" property="name" />
+            <result column="actor_gender" property="gender" />
+            <result column="actor_desc" property="desc" />
+            <result column="actor_nation" property="nationality" />
+            <result column="actor_birthday" property="birthday" />
+        </collection>
+        <collection property="directorDOS" javaType="java.util.List" ofType="cn.edu.ecnu.model.dataobject.DirectorDO">
+            <id column="director_id" property="id"/>
+            <result column="director_name" property="name" />
+            <result column="director_gender" property="gender" />
+            <result column="director_desc" property="desc" />
+            <result column="director_nation" property="nationality" />
+            <result column="director_birthday" property="birthday" />
+        </collection>
     </resultMap>
 
     <resultMap id="UserRatingResultMap" type="cn.edu.ecnu.model.dataobject.RateDO" >
@@ -17,16 +51,24 @@
     </resultMap>
 
     <sql id="Movie_Column_List" >
-        id, title, url, cover, length, rate, showtime, actor,
-        director, language, district, category, composer, othername
+        movie.id as movie_id, title, url, cover, `length`, rate, showtime, `language`,
+        district, category, composer, othername, movie.`desc` as movie_desc,
+        actor.id as actor_id, actor.name as actor_name, actor.gender as actor_gender,
+        actor.desc as actor_desc, actor.nationality as actor_nation, actor.birthday as actor_birthday,
+        director.id as director_id, director.name as director_name, director.gender as director_gender,
+        director.desc as director_desc, director.nationality as director_nation, director.birthday as director_birthday
     </sql>
 
     <!-- MySQL -->
-    <select id="selectMovieById" parameterType="java.lang.Integer" resultType="cn.edu.ecnu.model.dataobject.MovieDO" >
+    <select id="selectMovieById" parameterType="java.lang.Integer" resultMap="MovieBindActorDirectorResultMap" >
         SELECT
         <include refid="Movie_Column_List" />
         FROM movie
-        WHERE id = #{id}
+            LEFT OUTER JOIN act on movie.id = act.movie_id
+            LEFT OUTER JOIN actor on actor.id = act.actor_id
+            LEFT OUTER JOIN direct on  movie.id = direct.movie_id
+            LEFT OUTER JOIN director on direct.director_id = director.id
+        WHERE movie.id = #{id}
     </select>
 
     <select id="selectMovieByTitle" parameterType="java.lang.String" resultType="cn.edu.ecnu.model.dataobject.MovieDO" >
@@ -36,10 +78,16 @@
         WHERE title = #{title}
     </select>
 
+    <select id="selectAllMovies" resultType="cn.edu.ecnu.model.dataobject.MovieDO" >
+        SELECT
+        <include refid="Movie_Column_List" />
+        FROM movie
+    </select>
+
     <insert id="insertBatchMovies" parameterType="java.util.List">
         INSERT INTO movie(
-        title, url, cover, length, rate, showtime, actor,
-        director, language, district, category, composer, othername
+        title, url, cover, length, rate, showtime, language,
+        district, category, composer, othername, `desc`
         )
         VALUES
         <foreach item="movie" collection="list" index="idx" open="" separator="," close="">
@@ -49,22 +97,16 @@
             #{movie.length, jdbcType=INTEGER},
             #{movie.rate, jdbcType=DOUBLE},
             #{movie.showtime, jdbcType=INTEGER},
-            #{movie.actor, jdbcType=VARCHAR},
-            #{movie.director, jdbcType=VARCHAR},
             #{movie.language, jdbcType=VARCHAR},
             #{movie.district, jdbcType=VARCHAR},
             #{movie.category, jdbcType=VARCHAR},
             #{movie.composer, jdbcType=VARCHAR},
-            #{movie.othername, jdbcType=VARCHAR})
+            #{movie.othername, jdbcType=VARCHAR},
+            #{movie.desc, jdbcType=VARCHAR}
+            )
+
         </foreach>
 
     </insert>
-
-    <!-- Neo4j -->
-<!--    <select id="selectRatingMovieByUserId" parameterType="java.lang.Integer" resultMap="UserRatingResultMap" >-->
-<!--        MATCH (u:User{id:#{id}})-[r:RATED]-(m:Movie)-->
-<!--        WITH id(r) AS id, m.title AS title, r.grading AS grading-->
-<!--        RETURN id, title, grading-->
-<!--    </select>-->
 
 </mapper>

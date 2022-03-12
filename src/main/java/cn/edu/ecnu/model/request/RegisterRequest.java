@@ -1,13 +1,11 @@
-package cn.edu.ecnu.model.dataobject;
+package cn.edu.ecnu.model.request;
 
 import lombok.Data;
 
 import java.util.Date;
 
 @Data
-public class UserDO {
-
-    Integer id;
+public class RegisterRequest {
 
     String username;
 
@@ -15,9 +13,8 @@ public class UserDO {
 
     Integer gender;
 
-    String email;
-
     Date birthday;
 
-    String desc;
+    String email;
+
 }

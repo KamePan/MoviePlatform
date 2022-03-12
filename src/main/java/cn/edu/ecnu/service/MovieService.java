@@ -2,14 +2,15 @@ package cn.edu.ecnu.service;
 
 import cn.edu.ecnu.convertor.MovieConvertor;
 import cn.edu.ecnu.model.dataobject.MovieDO;
-import cn.edu.ecnu.model.dataobject.RateDO;
 import cn.edu.ecnu.model.entity.Movie;
 import cn.edu.ecnu.repository.MovieRepository;
 import cn.edu.ecnu.repository.RateRepository;
-import cn.edu.ecnu.util.Neo4jWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,18 +35,45 @@ public class MovieService {
      * @return
      */
     public List<Movie> queryRatingMoviesByUserId(Integer id) {
-        Neo4jWrapper neo4jWrapper = Neo4jWrapper.newInstance();
-        List<RateDO> rateDOS = neo4jWrapper.queryRatingMovieByUserId(id);
-        List<Movie> movies = new ArrayList<>();
-        for (RateDO rateDO: rateDOS) {
-            /* 这里很奇怪，字符串中自带 " 双引号，而查询 mysql 中相应 title 字段并不带引号*/
-            String title = rateDO.getTitle().replaceAll("\"", "");
-            List<MovieDO> MovieDOSWithInfo = movieRepository.selectMovieByTitle(title);
-            if (MovieDOSWithInfo.size() != 0) {
-                Movie movie = MovieConvertor.convertDOToEntity(MovieDOSWithInfo.get(0));
+//        Neo4jWrapper neo4jWrapper = Neo4jWrapper.newInstance();
+//        List<RateDO> rateDOS = neo4jWrapper.queryRatingMovieByUserId(id);
+//        List<Movie> movies = new ArrayList<>();
+//        for (RateDO rateDO: rateDOS) {
+//            /* 这里很奇怪，字符串中自带 " 双引号，而查询 mysql 中相应 title 字段并不带引号*/
+//            String title = rateDO.getTitle().replaceAll("\"", "");
+//            List<MovieDO> MovieDOSWithInfo = movieRepository.selectMovieByTitle(title);
+//            if (MovieDOSWithInfo.size() != 0) {
+//                Movie movie = MovieConvertor.convertDOToEntity(MovieDOSWithInfo.get(0));
+//                movies.add(movie);
+//            }
+//        }
+//        return movies;
+        return new ArrayList<>();
+    }
+
+    /**
+     * 开启进程执行 python 程序获取推荐列表
+     */
+    public List<Movie> queryRecommendMovieListByUserId(Integer id) {
+        String PYTHON3_PATH = "/Users/pankaiming/miniforge3/envs/tf_mac/bin/python";
+        String PYTHON_SCRIPT_PATH = "/Users/pankaiming/PycharmProjects/MovieRecommendSystem/main.py";
+        try {
+            Process process = Runtime.getRuntime().exec(String.join(" ", PYTHON3_PATH, PYTHON_SCRIPT_PATH));
+            System.out.println(process.waitFor());
+            BufferedReader in = new BufferedReader(new InputStreamReader(process.getInputStream()));
+            String title = null;
+            List<Movie> movies = new ArrayList<>();
+            while ((title = in.readLine()) != null) {
+                System.out.println(title);
+                List<MovieDO> movieDOS = movieRepository.selectMovieByTitle(title);
+                Movie movie = MovieConvertor.convertDOToEntity(movieDOS.get(0));
                 movies.add(movie);
             }
+            return movies;
+
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+            return null;
         }
-        return movies;
     }
 }

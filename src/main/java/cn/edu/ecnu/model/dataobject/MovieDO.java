@@ -1,12 +1,10 @@
 package cn.edu.ecnu.model.dataobject;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.Data;
 
-@Getter
-@Setter
-@ToString
+import java.util.List;
+
+@Data
 public class MovieDO {
 
     Integer id;
@@ -19,11 +17,7 @@ public class MovieDO {
 
     String cover;
 
-    String director;
-
     String composer;
-
-    String actor;
 
     String category;
 
@@ -36,4 +30,10 @@ public class MovieDO {
     Integer length;
 
     String othername;
+
+    String desc;
+
+    List<ActorDO> actorDOS;
+
+    List<DirectorDO> directorDOS;
 }

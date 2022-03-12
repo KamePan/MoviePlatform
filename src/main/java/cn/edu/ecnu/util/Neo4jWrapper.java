@@ -38,7 +38,7 @@ public class Neo4jWrapper {
     }
 
     public List<RateDO> queryRatingMovieByUserId(Integer id) {
-        try (Session session = driver.session()){
+        /*try (Session session = driver.session()){
             List<RateDO> rateDOS = session.writeTransaction(tx -> {
                 Result result = tx.run(
                         "MATCH (u:User{id:\'" + id.toString() + "\'})-[r:RATED]-(m:Movie) " +
@@ -55,6 +55,7 @@ public class Neo4jWrapper {
                 return rates;
             });
             return rateDOS;
-        }
+        }*/
+        return null;
     }
 }

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.edu.ecnu.repository.DirectorRepository" >
+
+    <resultMap id="BaseDirectorResultMap" type="cn.edu.ecnu.model.dataobject.DirectorDO" >
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="name" property="name" jdbcType="VARCHAR" />
+        <result column="nationality" property="nationality" jdbcType="VARCHAR" />
+        <result column="gender" property="gender" jdbcType="INTEGER" />
+        <result column="desc" property="desc" jdbcType="VARCHAR" />
+        <result column="birthday" property="birthday" jdbcType="TIMESTAMP" />
+    </resultMap>
+
+
+    <sql id="DirectorColumnList" >
+        id, `name`, birthday, `desc`, nationality, gender
+    </sql>
+
+    <insert id="insertBatchDirectors" parameterType="java.util.List">
+        INSERT INTO director(
+            name, nationality, gender, birthday, `desc`
+        )
+        VALUES
+        <foreach item="director" collection="list" index="idx" open="" separator="," close="">
+            (#{director.name, jdbcType=VARCHAR},
+            #{director.nationality, jdbcType=VARCHAR},
+            #{director.gender, jdbcType=INTEGER},
+            #{director.birthday, jdbcType=TIMESTAMP},
+            #{director.desc, jdbcType=VARCHAR})
+        </foreach>
+
+    </insert>
+
+    <select id="selectDirectorByName" parameterType="java.lang.String" resultMap="BaseDirectorResultMap">
+        SELECT
+        <include refid="DirectorColumnList"/>
+        FROM director
+        WHERE director.name = #{name}
+    </select>
+
+</mapper>

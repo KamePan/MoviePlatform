@@ -5,19 +5,17 @@ import lombok.Data;
 import java.util.Date;
 
 @Data
-public class UserDO {
+public class DirectorDO {
 
     Integer id;
 
-    String username;
+    String name;
 
-    String password;
+    String nationality;
 
     Integer gender;
 
-    String email;
+    String desc;
 
     Date birthday;
-
-    String desc;
 }

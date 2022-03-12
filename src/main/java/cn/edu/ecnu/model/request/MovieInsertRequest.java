@@ -1,16 +1,11 @@
-package cn.edu.ecnu.model.response;
+package cn.edu.ecnu.model.request;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.Data;
 
-import java.io.Serializable;
 import java.util.List;
 
-@Getter
-@Setter
-@ToString
-public class MovieResponse implements Serializable {
+@Data
+public class MovieInsertRequest {
 
     Integer id;
 
@@ -39,4 +34,6 @@ public class MovieResponse implements Serializable {
     Integer length;
 
     List<String> othername;
+
+    String desc;
 }

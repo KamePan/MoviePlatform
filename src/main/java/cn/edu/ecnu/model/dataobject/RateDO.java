@@ -1,22 +1,22 @@
 package cn.edu.ecnu.model.dataobject;
 
+import cn.edu.ecnu.model.entity.Movie;
 import lombok.Data;
-import org.springframework.data.neo4j.core.schema.Id;
-import org.springframework.data.neo4j.core.schema.Node;
-import org.springframework.data.neo4j.core.schema.Property;
 
-import java.io.Serializable;
+import java.util.Date;
 
 @Data
-@Node
-public class RateDO implements Serializable {
+public class RateDO {
 
-    @Id
     Integer id;
 
-    @Property("rate")
     Double rate;
 
-    @Property("title")
-    String title;
+    String comment;
+
+    Date rateTime;
+
+    Integer userId;
+
+    Integer movieDO;
 }

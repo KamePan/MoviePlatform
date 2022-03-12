@@ -1,6 +1,9 @@
+package cn.edu.ecnu.util;
+
 import cn.edu.ecnu.model.dataobject.RateDO;
 import cn.edu.ecnu.util.Neo4jWrapper;
 import org.neo4j.driver.*;
+import org.neo4j.driver.Result;
 
 import java.util.List;
 
@@ -22,7 +25,7 @@ public class Neo4jRunTest implements AutoCloseable  {
     public void printGreeting( final String message ) {
         try (Session session = driver.session()) {
             String greeting = session.writeTransaction(tx -> {
-                Result result = tx.run(
+                org.neo4j.driver.Result result = tx.run(
                         "CREATE (a:Greeting) " + "SET a.message = $message " +
                                 "RETURN a.message + ', from node ' + id(a)",
                         parameters("message", message ));
@@ -50,9 +53,9 @@ public class Neo4jRunTest implements AutoCloseable  {
     }
 
     public static void main( String... args ) throws Exception {
-        Neo4jWrapper neo4jWrapper = Neo4jWrapper.newInstance();
+        /*Neo4jWrapper neo4jWrapper = Neo4jWrapper.newInstance();
         List<RateDO> rateDOS = neo4jWrapper.queryRatingMovieByUserId(440);
-        System.out.println(rateDOS);
+        System.out.println(rateDOS);*/
 
     }
 }
