@@ -1,5 +1,7 @@
 package cn.edu.ecnu.model.entity;
 
+import cn.edu.ecnu.model.dataobject.ActorDO;
+import cn.edu.ecnu.model.dataobject.DirectorDO;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -21,11 +23,7 @@ public class Movie {
 
     String cover;
 
-    List<String> director;
-
     List<String> composer;
-
-    List<String> actor;
 
     List<String> category;
 
@@ -37,5 +35,11 @@ public class Movie {
 
     Integer length;
 
+    String desc;
+
     List<String> othername;
+
+    List<ActorDO> actor;
+
+    List<DirectorDO> director;
 }

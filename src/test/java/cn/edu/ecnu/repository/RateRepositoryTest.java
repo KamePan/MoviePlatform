@@ -1,9 +1,7 @@
 package cn.edu.ecnu.repository;
 
-import cn.edu.ecnu.model.dataobject.MovieDO;
 import cn.edu.ecnu.model.dataobject.RateDO;
-import cn.edu.ecnu.model.dataobject.StatisticDO;
-import cn.edu.ecnu.model.entity.Rate;
+import cn.edu.ecnu.model.dataobject.StatDO;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -38,10 +36,8 @@ public class RateRepositoryTest {
     @Test
     public void insertRateTest() {
         RateDO rateDO = new RateDO();
-        MovieDO movieDO = new MovieDO();
-        movieDO.setId(1);
         rateDO.setUserId(153176);
-        rateDO.setMovieDO(movieDO);
+        rateDO.setMovieId(1);
         rateDO.setRateTime(Calendar.getInstance().getTime());
         rateDO.setRate(3D);
         rateDO.setId(1000);
@@ -65,7 +61,7 @@ public class RateRepositoryTest {
     }
 
     @Test void selectStatisticByUserIdTest() {
-        StatisticDO statisticDO = rateRepository.selectStatisticByUserId(153176);
-        System.out.println(statisticDO);
+        StatDO statDO = rateRepository.selectStatisticByUserId(153176);
+        System.out.println(statDO);
     }
 }

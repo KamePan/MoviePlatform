@@ -2,6 +2,8 @@ package cn.edu.ecnu.model.response;
 
 import lombok.Data;
 
+import java.util.Date;
+
 @Data
 public class RateQueryResponse {
 
@@ -11,7 +13,9 @@ public class RateQueryResponse {
 
     Double rate;
 
+    Date rateTime;
+
     String comment;
 
-    MovieQueryResponse movieQueryResponse;
+    Integer movieId;
 }

@@ -3,7 +3,8 @@ package cn.edu.ecnu.service;
 import cn.edu.ecnu.convertor.RateConvertor;
 import cn.edu.ecnu.model.dataobject.RateDO;
 import cn.edu.ecnu.model.entity.Rate;
-import cn.edu.ecnu.model.dataobject.StatisticDO;
+import cn.edu.ecnu.model.dataobject.StatDO;
+import cn.edu.ecnu.model.entity.Stat;
 import cn.edu.ecnu.repository.RateRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -53,9 +54,9 @@ public class RateService {
         rateRepository.deleteRate(id);
     }
 
-    public StatisticDO queryRateStatisticByUserId(Integer id) {
-        StatisticDO statisticDO = rateRepository.selectStatisticByUserId(id);
-        return statisticDO;
+    public Stat queryRateStatisticByUserId(Integer id) {
+        StatDO statDO = rateRepository.selectStatisticByUserId(id);
+        return RateConvertor.convertDOToEntity(statDO);
     }
 
 

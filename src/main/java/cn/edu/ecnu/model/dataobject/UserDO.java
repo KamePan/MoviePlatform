@@ -20,4 +20,6 @@ public class UserDO {
     Date birthday;
 
     String desc;
+
+    String role;
 }

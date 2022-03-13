@@ -1,9 +1,9 @@
-package cn.edu.ecnu.model.dataobject;
+package cn.edu.ecnu.model.entity;
 
 import lombok.Data;
 
 @Data
-public class StatisticDO {
+public class Stat {
 
     Double avgRate;
 

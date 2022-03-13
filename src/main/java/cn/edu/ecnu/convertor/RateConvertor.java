@@ -1,19 +1,22 @@
 package cn.edu.ecnu.convertor;
 
 import cn.edu.ecnu.model.dataobject.RateDO;
+import cn.edu.ecnu.model.dataobject.StatDO;
 import cn.edu.ecnu.model.entity.Rate;
+import cn.edu.ecnu.model.entity.Stat;
+import cn.edu.ecnu.model.request.RateModifyRequest;
 import cn.edu.ecnu.model.response.RateQueryResponse;
-import com.sun.org.apache.bcel.internal.generic.NEW;
+import cn.edu.ecnu.model.response.RateStatResponse;
 import org.springframework.beans.BeanUtils;
 
-import java.util.Arrays;
-import java.util.stream.Collectors;
+import java.util.Calendar;
 
 public class RateConvertor {
 
-    public static Rate convertResponseToEntity(RateQueryResponse rateQueryResponse) {
+    public static Rate convertRequestToEntity(RateModifyRequest rateModifyRequest) {
         Rate rate = new Rate();
-        BeanUtils.copyProperties(rateQueryResponse, rate);
+        BeanUtils.copyProperties(rateModifyRequest, rate);
+        rate.setRateTime(Calendar.getInstance().getTime());
         return rate;
     }
 
@@ -26,14 +29,26 @@ public class RateConvertor {
     public static Rate convertDOToEntity(RateDO rateDO) {
         Rate rate = new Rate();
         BeanUtils.copyProperties(rateDO, rate);
-        rate.setMovie(MovieConvertor.convertDOToEntity(rateDO.getMovieDO()));
         return rate;
     }
 
     public static RateDO convertEntityToDO(Rate rate) {
         RateDO rateDO = new RateDO();
         BeanUtils.copyProperties(rate, rateDO);
-        rateDO.setMovieDO(MovieConvertor.convertEntityToDO(rate.getMovie()));
         return rateDO;
     }
+
+    public static Stat convertDOToEntity(StatDO statDO) {
+        Stat stat = new Stat();
+        BeanUtils.copyProperties(statDO, stat);
+        return stat;
+    }
+
+    public static RateStatResponse convertEntityToResponse(Stat stat) {
+        RateStatResponse rateStatResponse = new RateStatResponse();
+        BeanUtils.copyProperties(stat, rateStatResponse);
+        return rateStatResponse;
+    }
+
+
 }

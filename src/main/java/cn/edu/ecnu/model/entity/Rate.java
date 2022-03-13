@@ -15,5 +15,8 @@ public class Rate {
 
     Date rateTime;
 
-    Movie movie;
+    Integer movieId;
+
+    Integer userId;
+
 }

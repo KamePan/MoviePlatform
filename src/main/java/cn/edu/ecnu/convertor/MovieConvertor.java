@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 
 public class MovieConvertor {
 
-    public static Movie convertResponseToEntity(MovieQueryResponse movieQueryResponse) {
+    public static Movie convertRequestToEntity(MovieQueryResponse movieQueryResponse) {
         Movie movie = new Movie();
         BeanUtils.copyProperties(movieQueryResponse, movie);
         return movie;

@@ -5,7 +5,7 @@ import lombok.Data;
 import java.util.Date;
 
 @Data
-public class RegisterRequest {
+public class UserRegisterRequest {
 
     String username;
 
@@ -16,5 +16,9 @@ public class RegisterRequest {
     Date birthday;
 
     String email;
+
+    String role;
+
+    String desc;
 
 }

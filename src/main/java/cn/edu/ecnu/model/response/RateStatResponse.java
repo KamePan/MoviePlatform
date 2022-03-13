@@ -3,7 +3,7 @@ import lombok.Data;
 
 
 @Data
-public class RateStatisticResponse {
+public class RateStatResponse {
 
     Double avgRate;
 

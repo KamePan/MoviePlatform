@@ -12,4 +12,7 @@ public interface UserRepository {
 
     void insertBatchUsers(List<UserDO> userDOS);
 
+    List<UserDO> selectUserByUsername(String username);
+
+    void insertUser(UserDO userDO);
 }

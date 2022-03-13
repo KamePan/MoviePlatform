@@ -8,6 +8,7 @@
         <result column="url" property="url" jdbcType="VARCHAR" />
         <result column="cover" property="cover" jdbcType="VARCHAR" />
         <result column="length" property="length" jdbcType="INTEGER" />
+        <result column="rate" property="rate" jdbcType="DOUBLE" />
         <result column="showtime" property="showtime" jdbcType="INTEGER" />
         <result column="composer" property="composer" jdbcType="VARCHAR" />
         <result column="district" property="district" jdbcType="VARCHAR" />
@@ -21,12 +22,13 @@
         <result column="url" property="url" jdbcType="VARCHAR" />
         <result column="cover" property="cover" jdbcType="VARCHAR" />
         <result column="length" property="length" jdbcType="INTEGER" />
+        <result column="rate" property="rate" jdbcType="DOUBLE" />
         <result column="showtime" property="showtime" jdbcType="INTEGER" />
         <result column="composer" property="composer" jdbcType="VARCHAR" />
         <result column="district" property="district" jdbcType="VARCHAR" />
         <result column="language" property="language" jdbcType="VARCHAR" />
         <result column="movie_desc" property="desc" jdbcType="VARCHAR" />
-        <collection property="actorDOS" javaType="java.util.List" ofType="cn.edu.ecnu.model.dataobject.DirectorDO">
+        <collection property="actor" javaType="java.util.List" ofType="cn.edu.ecnu.model.dataobject.ActorDO">
             <id column="actor_id" property="id"/>
             <result column="actor_name" property="name" />
             <result column="actor_gender" property="gender" />
@@ -34,7 +36,7 @@
             <result column="actor_nation" property="nationality" />
             <result column="actor_birthday" property="birthday" />
         </collection>
-        <collection property="directorDOS" javaType="java.util.List" ofType="cn.edu.ecnu.model.dataobject.DirectorDO">
+        <collection property="director" javaType="java.util.List" ofType="cn.edu.ecnu.model.dataobject.DirectorDO">
             <id column="director_id" property="id"/>
             <result column="director_name" property="name" />
             <result column="director_gender" property="gender" />
@@ -62,7 +64,7 @@
     <!-- MySQL -->
     <select id="selectMovieById" parameterType="java.lang.Integer" resultMap="MovieBindActorDirectorResultMap" >
         SELECT
-        <include refid="Movie_Column_List" />
+            <include refid="Movie_Column_List" />
         FROM movie
             LEFT OUTER JOIN act on movie.id = act.movie_id
             LEFT OUTER JOIN actor on actor.id = act.actor_id
@@ -71,10 +73,14 @@
         WHERE movie.id = #{id}
     </select>
 
-    <select id="selectMovieByTitle" parameterType="java.lang.String" resultType="cn.edu.ecnu.model.dataobject.MovieDO" >
+    <select id="selectMovieByTitle" parameterType="java.lang.String" resultMap="MovieBindActorDirectorResultMap" >
         SELECT
-        <include refid="Movie_Column_List"></include>
+            <include refid="Movie_Column_List"></include>
         FROM movie
+            LEFT OUTER JOIN act on movie.id = act.movie_id
+            LEFT OUTER JOIN actor on actor.id = act.actor_id
+            LEFT OUTER JOIN direct on  movie.id = direct.movie_id
+            LEFT OUTER JOIN director on direct.director_id = director.id
         WHERE title = #{title}
     </select>
 

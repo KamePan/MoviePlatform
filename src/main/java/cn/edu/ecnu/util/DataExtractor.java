@@ -64,9 +64,10 @@ public class DataExtractor {
 
             /* 由于只有名称因此想导入关系也太难了 */
             for (Movie movie : movies) {
-                List<String> actors = movie.getActor();
+                List<ActorDO> actors = movie.getActor();
                 if (actors == null) continue;
-                for (String actor: actors) {
+                for (ActorDO actorDO1: actors) {
+                    String actor = actorDO1.getName();
                     actor = actor.replaceAll("\"", "");
                     if (!actorSet.contains(actor)) {
                         ActorDO actorDO = new ActorDO();
@@ -100,9 +101,10 @@ public class DataExtractor {
 
             /* 由于只有名称因此想导入关系也太难了 */
             for (Movie movie : movies) {
-                List<String> directors = movie.getDirector();
+                List<DirectorDO> directors = movie.getDirector();
                 if (directors == null) continue;
-                for (String director: directors) {
+                for (DirectorDO directorDO1: directors) {
+                    String director = directorDO1.getName();
                     director = director.replaceAll("\"", "");
                     if (!directorSet.contains(director)) {
                         DirectorDO directorDO = new DirectorDO();

@@ -1,6 +1,5 @@
 package cn.edu.ecnu.model.dataobject;
 
-import cn.edu.ecnu.model.entity.Movie;
 import lombok.Data;
 
 import java.util.Date;
@@ -18,5 +17,5 @@ public class RateDO {
 
     Integer userId;
 
-    Integer movieDO;
+    Integer movieId;
 }

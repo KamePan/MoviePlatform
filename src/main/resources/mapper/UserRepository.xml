@@ -12,11 +12,9 @@
         <result column="birthday" property="birthday" jdbcType="TIMESTAMP" />
     </resultMap>
 
-
     <sql id="UserColumnList" >
-        id, `name`, birthday, email, `desc`, nationality, gender
+        id, `username`, `password`, birthday, email, `desc`, gender, `role`
     </sql>
-
 
     <insert id="insertBatchUsers" parameterType="java.util.List">
         INSERT INTO user(
@@ -32,7 +30,29 @@
             #{user.birthday, jdbcType=TIMESTAMP},
             #{user.desc, jdbcType=VARCHAR})
         </foreach>
-
     </insert>
+
+    <insert id="insertUser" parameterType="cn.edu.ecnu.model.dataobject.UserDO" >
+        INSERT INTO user(
+        id, username, password, email, gender, birthday, `desc`, `role`
+        )
+        VALUES
+        (#{id, jdbcType=INTEGER},
+        #{username, jdbcType=VARCHAR},
+        #{password, jdbcType=VARCHAR},
+        #{email, jdbcType=VARCHAR},
+        #{gender, jdbcType=INTEGER},
+        #{birthday, jdbcType=TIMESTAMP},
+        #{desc, jdbcType=VARCHAR},
+        #{role, jdbcType=VARCHAR})
+    </insert>
+
+    <select id="selectUserByUsername" parameterType="java.lang.String" resultType="cn.edu.ecnu.model.dataobject.UserDO">
+        SELECT
+            <include refid="UserColumnList" />
+        FROM user
+        WHERE user.username = #{username};
+    </select>
+
 
 </mapper>

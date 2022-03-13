@@ -14,6 +14,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Api("电影信息 Controller")
 @RestController
 @RequestMapping("/movie")
@@ -28,6 +31,16 @@ public class MovieController {
         Movie movie = movieService.queryMovieInfoByMovieId(id);
         MovieQueryResponse movieQueryResponse = MovieConvertor.convertEntityToResponse(movie);
         return ResultGenerator.genSuccessResult(movieQueryResponse);
+    }
+
+    @ApiOperation("根据用户 ID 返回电影推荐列表")
+    @GetMapping("recommend/{id}")
+    public Result queryMovieRecommendListByUserId(@PathVariable Integer id) {
+        List<Movie> movies = movieService.queryRecommendMovieListByUserId(id);
+        List<MovieQueryResponse> movieQueryResponses = movies.stream()
+                .map(MovieConvertor::convertEntityToResponse)
+                .collect(Collectors.toList());
+        return ResultGenerator.genSuccessResult(movieQueryResponses);
     }
 
 }

@@ -33,7 +33,7 @@ public class MovieDO {
 
     String desc;
 
-    List<ActorDO> actorDOS;
+    List<ActorDO> actor;
 
-    List<DirectorDO> directorDOS;
+    List<DirectorDO> director;
 }

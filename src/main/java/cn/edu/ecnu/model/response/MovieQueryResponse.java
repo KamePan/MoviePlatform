@@ -1,5 +1,7 @@
 package cn.edu.ecnu.model.response;
 
+import cn.edu.ecnu.model.dataobject.ActorDO;
+import cn.edu.ecnu.model.dataobject.DirectorDO;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -22,11 +24,7 @@ public class MovieQueryResponse implements Serializable {
 
     String cover;
 
-    List<String> director;
-
     List<String> composer;
-
-    List<String> actor;
 
     List<String> category;
 
@@ -38,5 +36,12 @@ public class MovieQueryResponse implements Serializable {
 
     Integer length;
 
+    String desc;
+
     List<String> othername;
+
+    List<ActorDO> actor;
+
+    List<DirectorDO> director;
+
 }

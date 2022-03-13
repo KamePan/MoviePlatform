@@ -1,12 +1,11 @@
 package cn.edu.ecnu.controller;
 
-import cn.edu.ecnu.convertor.MovieConvertor;
 import cn.edu.ecnu.convertor.RateConvertor;
 import cn.edu.ecnu.model.entity.Rate;
-import cn.edu.ecnu.model.request.RateInsertRequest;
+import cn.edu.ecnu.model.entity.Stat;
+import cn.edu.ecnu.model.request.RateModifyRequest;
 import cn.edu.ecnu.model.response.RateQueryResponse;
-import cn.edu.ecnu.model.response.RateStatisticResponse;
-import cn.edu.ecnu.service.MovieService;
+import cn.edu.ecnu.model.response.RateStatResponse;
 import cn.edu.ecnu.service.RateService;
 import cn.edu.ecnu.util.Result;
 import cn.edu.ecnu.util.ResultGenerator;
@@ -22,9 +21,6 @@ import java.util.stream.Collectors;
 public class RateController {
 
     @Autowired
-    private MovieService movieService;
-
-    @Autowired
     private RateService rateService;
 
     @ApiOperation("根据用户 ID 返回用户全部评分")
@@ -32,7 +28,7 @@ public class RateController {
     public Result<List<RateQueryResponse>> queryRateByUserId(@PathVariable Integer id) {
         List<Rate> rates = rateService.queryRateByUserId(id);
         List<RateQueryResponse> rateQueryResponses = rates.stream()
-                .map(rate -> RateConvertor.convertEntityToResponse(rate))
+                .map(RateConvertor::convertEntityToResponse)
                 .collect(Collectors.toList());
         return ResultGenerator.genSuccessResult(rateQueryResponses);
     }
@@ -42,48 +38,51 @@ public class RateController {
     public Result<List<RateQueryResponse>> queryRateByMovieId(@PathVariable Integer id) {
         List<Rate> rates = rateService.queryRateByMovieId(id);
         List<RateQueryResponse> rateQueryResponses = rates.stream()
-                .map(rate -> RateConvertor.convertEntityToResponse(rate))
+                .map(RateConvertor::convertEntityToResponse)
                 .collect(Collectors.toList());
         return ResultGenerator.genSuccessResult(rateQueryResponses);
     }
 
     @ApiOperation("根据电影 ID 及用户 ID 返回当前用户对当前电影评分")
-    @GetMapping("/movie/user")
+    @GetMapping("/movie_user")
     public Result<List<RateQueryResponse>> queryRateByUserAndMovieId(@RequestParam("user_id") Integer userId,
                                                                @RequestParam("movie_id") Integer movieId) {
         List<Rate> rates = rateService.queryRateByUserAndMovieId(userId, movieId);
         List<RateQueryResponse> rateQueryResponses = rates.stream()
-                .map(rate -> RateConvertor.convertEntityToResponse(rate))
+                .map(RateConvertor::convertEntityToResponse)
                 .collect(Collectors.toList());
         return ResultGenerator.genSuccessResult(rateQueryResponses);
     }
 
     @ApiOperation("添加用户对电影评分数据")
     @PostMapping("/insert")
-    public Result<Object> insertUserMovieRate(RateInsertRequest rateInsertRequest) {
-
+    public Result insertUserMovieRate(@RequestBody RateModifyRequest rateModifyRequest) {
+        Rate rate = RateConvertor.convertRequestToEntity(rateModifyRequest);
+        rateService.insertUserMovieRate(rate);
         return ResultGenerator.genSuccessResult();
     }
 
     @ApiOperation("根据评分 ID 删除电影评分")
-    @DeleteMapping("/delete/{id}")
-    public Result<Object> deleteRateById(@PathVariable Integer id) {
-
+    @PostMapping("/delete/{id}")
+    public Result deleteRateById(@PathVariable Integer id) {
+        rateService.deleteRateById(id);
         return ResultGenerator.genSuccessResult();
     }
 
     @ApiOperation("根据评分 ID 更新电影评分")
-    @PutMapping("/update/{id}")
-    public Result<Object> updateRateById(@PathVariable Integer id) {
-
+    @PostMapping("/update")
+    public Result updateRateById(@RequestBody RateModifyRequest rateModifyRequest) {
+        Rate rate = RateConvertor.convertRequestToEntity(rateModifyRequest);
+        rateService.updateUserMovieRate(rate);
         return ResultGenerator.genSuccessResult();
     }
 
     @ApiOperation("根据用户 ID 查询当前用户电影评分统计数据")
     @GetMapping("/stat/{id}")
-    public Result<RateStatisticResponse> queryRateStatisticByUserId(@PathVariable Integer id) {
-
-        return ResultGenerator.genSuccessResult();
+    public Result<RateStatResponse> queryRateStatisticByUserId(@PathVariable Integer id) {
+        Stat stat = rateService.queryRateStatisticByUserId(id);
+        RateStatResponse rateStatResponse = RateConvertor.convertEntityToResponse(stat);
+        return ResultGenerator.genSuccessResult(rateStatResponse);
     }
 
 }
