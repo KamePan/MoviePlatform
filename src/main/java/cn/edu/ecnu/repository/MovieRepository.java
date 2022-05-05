@@ -18,4 +18,7 @@ public interface MovieRepository {
 
     List<MovieDO> selectAllMovies();
 
+    List<MovieDO> selectMovieSelective(MovieDO movieDO);
+
+    List<MovieDO> selectMovieByScoreDesc(Integer size);
 }

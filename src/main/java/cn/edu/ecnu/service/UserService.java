@@ -18,4 +18,13 @@ public class UserService {
         userRepository.insertUser(userDO);
     }
 
+    public void modifyUserInfo(User user) {
+        UserDO userDO = UserConvertor.convertEntityToDO(user);
+        userRepository.updateUserById(userDO);
+    }
+
+    public User queryUserById(Integer id) {
+        UserDO userDO = userRepository.selectUserById(id);
+        return UserConvertor.convertDOToEntity(userDO);
+    }
 }

@@ -2,6 +2,7 @@ package cn.edu.ecnu.convertor;
 
 import cn.edu.ecnu.model.dataobject.MovieDO;
 import cn.edu.ecnu.model.entity.Movie;
+import cn.edu.ecnu.model.request.MovieSearchRequest;
 import cn.edu.ecnu.model.response.MovieQueryResponse;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
@@ -20,6 +21,10 @@ public class MovieConvertor {
     public static MovieQueryResponse convertEntityToResponse(Movie movie) {
         MovieQueryResponse movieQueryResponse = new MovieQueryResponse();
         BeanUtils.copyProperties(movie, movieQueryResponse);
+        String prefix = "https://img9.doubanio.com/view/photo/l/public/p";
+        String suffix = ".jpg";
+        String coverUrl = prefix.concat(movie.getCover()).concat(suffix);
+        movieQueryResponse.setCover(coverUrl);
         return movieQueryResponse;
     }
 
@@ -58,5 +63,11 @@ public class MovieConvertor {
         if (movie.getOthername() != null)
             movieDO.setOthername(String.join(", ", movie.getOthername()));
         return movieDO;
+    }
+
+    public static Movie convertRequestToEntity(MovieSearchRequest movieSearchRequest) {
+        Movie movie = new Movie();
+        BeanUtils.copyProperties(movieSearchRequest, movie);
+        return movie;
     }
 }

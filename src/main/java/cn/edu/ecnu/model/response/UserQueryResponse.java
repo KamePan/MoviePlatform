@@ -1,17 +1,15 @@
-package cn.edu.ecnu.model.entity;
+package cn.edu.ecnu.model.response;
 
 import lombok.Data;
 
 import java.util.Date;
 
 @Data
-public class User {
+public class UserQueryResponse {
 
     Integer id;
 
     String username;
-
-    String password;
 
     Integer gender;
 

@@ -2,6 +2,7 @@ package cn.edu.ecnu.controller;
 
 import cn.edu.ecnu.convertor.MovieConvertor;
 import cn.edu.ecnu.model.entity.Movie;
+import cn.edu.ecnu.model.request.MovieSearchRequest;
 import cn.edu.ecnu.model.response.MovieQueryResponse;
 import cn.edu.ecnu.service.MovieService;
 import cn.edu.ecnu.util.Result;
@@ -9,10 +10,7 @@ import cn.edu.ecnu.util.ResultGenerator;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -37,6 +35,27 @@ public class MovieController {
     @GetMapping("recommend/{id}")
     public Result queryMovieRecommendListByUserId(@PathVariable Integer id) {
         List<Movie> movies = movieService.queryRecommendMovieListByUserId(id);
+        List<MovieQueryResponse> movieQueryResponses = movies.stream()
+                .map(MovieConvertor::convertEntityToResponse)
+                .collect(Collectors.toList());
+        return ResultGenerator.genSuccessResult(movieQueryResponses);
+    }
+
+    @ApiOperation("获取高分电影")
+    @GetMapping("/high")
+    public Result queryHighScoreMovieList(@RequestParam Integer size) {
+        List<Movie> movies = movieService.queryHighScoreMovieList(size);
+        List<MovieQueryResponse> movieQueryResponses = movies.stream()
+                .map(MovieConvertor::convertEntityToResponse)
+                .collect(Collectors.toList());
+        return ResultGenerator.genSuccessResult(movieQueryResponses);
+    }
+
+    @ApiOperation("根据条件搜索电影")
+    @GetMapping("/search")
+    public Result queryMovieSelective( MovieSearchRequest movieSearchRequest) {
+        Movie movie = MovieConvertor.convertRequestToEntity(movieSearchRequest);
+        List<Movie> movies = movieService.queryMovieSelective(movie);
         List<MovieQueryResponse> movieQueryResponses = movies.stream()
                 .map(MovieConvertor::convertEntityToResponse)
                 .collect(Collectors.toList());

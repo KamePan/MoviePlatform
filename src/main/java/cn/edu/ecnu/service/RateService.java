@@ -6,6 +6,7 @@ import cn.edu.ecnu.model.entity.Rate;
 import cn.edu.ecnu.model.dataobject.StatDO;
 import cn.edu.ecnu.model.entity.Stat;
 import cn.edu.ecnu.repository.RateRepository;
+import io.jsonwebtoken.lang.Collections;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,8 +19,16 @@ public class RateService {
     @Autowired
     private RateRepository rateRepository;
 
-    public List<Rate> queryRateByUserId(Integer id) {
-        List<RateDO> rateDOS = rateRepository.selectRateByUserId(id);
+    public List<Rate> queryRateByUserIdOrderByTime(Integer id) {
+        List<RateDO> rateDOS = rateRepository.selectRateByUserIdOrderByTime(id);
+        List<Rate> rates = rateDOS.stream()
+                .map(rateDO -> RateConvertor.convertDOToEntity(rateDO))
+                .collect(Collectors.toList());
+        return rates;
+    }
+
+    public List<Rate> queryRateByUserIdOrderByRate(Integer id) {
+        List<RateDO> rateDOS = rateRepository.selectRateByUserIdOrderByRate(id);
         List<Rate> rates = rateDOS.stream()
                 .map(rateDO -> RateConvertor.convertDOToEntity(rateDO))
                 .collect(Collectors.toList());
@@ -34,12 +43,12 @@ public class RateService {
         return rates;
     }
 
-    public List<Rate> queryRateByUserAndMovieId(Integer userId, Integer movieId) {
+    public Rate queryRateByUserAndMovieId(Integer userId, Integer movieId) {
         List<RateDO> rateDOS = rateRepository.selectRateByUserAndMovieId(userId, movieId);
-        List<Rate> rates = rateDOS.stream()
-                .map(rateDO -> RateConvertor.convertDOToEntity(rateDO))
-                .collect(Collectors.toList());
-        return rates;
+        if (Collections.isEmpty(rateDOS)) {
+            return null;
+        }
+        return RateConvertor.convertDOToEntity(rateDOS.get(0));
     }
 
     public void insertUserMovieRate(Rate rate) {

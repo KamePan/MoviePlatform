@@ -1,0 +1,21 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+
+Actor User
+participant HTML
+participant Controller
+participant Service
+participant MySQLRepository
+participant Neo4jRepository
+
+User -> HTML: Submit Rate And Comment
+HTML -> Controller: HTTP /rate/insert
+Controller -> Service: Insert Rate Info
+Service -> MySQLRepository: Insert Rate Info
+Service -> Neo4jRepository: Insert Rate Info
+Service --> Controller: Rate Success
+Controller --> HTML: Rate Success
+HTML --> User: Display Rate Info
+@enduml

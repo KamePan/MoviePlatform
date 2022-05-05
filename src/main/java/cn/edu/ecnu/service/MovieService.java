@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class MovieService {
@@ -75,5 +76,23 @@ public class MovieService {
             e.printStackTrace();
             return null;
         }
+    }
+
+    public List<Movie> queryMovieSelective(Movie movie) {
+        MovieDO movieDO = MovieConvertor.convertEntityToDO(movie);
+        List<MovieDO> movieDOS = movieRepository.selectMovieSelective(movieDO);
+        List<Movie> movies = movieDOS.stream()
+                .map(MovieConvertor::convertDOToEntity)
+                .collect(Collectors.toList());
+        return movies;
+    }
+
+    public List<Movie> queryHighScoreMovieList(Integer size) {
+        List<MovieDO> movieDOS = movieRepository.selectMovieByScoreDesc(size);
+        List<Movie> movies = movieDOS.stream()
+                .limit(size)
+                .map(MovieConvertor::convertDOToEntity)
+                .collect(Collectors.toList());
+        return movies;
     }
 }

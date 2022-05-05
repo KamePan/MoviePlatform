@@ -17,5 +17,7 @@ public class RateQueryResponse {
 
     String comment;
 
-    Integer movieId;
+    UserQueryResponse user;
+
+    MovieQueryResponse movie;
 }

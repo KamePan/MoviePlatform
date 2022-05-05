@@ -19,7 +19,8 @@ public interface RateRepository {
 
     @Select("select id, rate, rate_time, comment, user_id, movie_id " +
             "from rate " +
-            "where user_id = #{id}")
+            "where user_id = #{id} " +
+            "ORDER BY rate DESC;")
     @Results(id = "RateBasicResultMap", value = {
             @Result(property = "id", column = "id"),
             @Result(property = "rate", column = "rate"),
@@ -28,11 +29,19 @@ public interface RateRepository {
             @Result(property = "userId", column = "user_id"),
             @Result(property = "movieId", column = "movie_id")
     })
-    List<RateDO> selectRateByUserId(Integer id);
+    List<RateDO> selectRateByUserIdOrderByRate(Integer id);
 
     @Select("select id, rate, rate_time, comment, user_id, movie_id " +
             "from rate " +
-            "where movie_id = #{id}")
+            "where user_id = #{id} " +
+            "ORDER BY rate_time DESC;")
+    @ResultMap("RateBasicResultMap")
+    List<RateDO> selectRateByUserIdOrderByTime(Integer id);
+
+    @Select("select id, rate, rate_time, comment, user_id, movie_id " +
+            "from rate " +
+            "where movie_id = #{id} " +
+            "ORDER BY rate_time DESC;")
     @ResultMap("RateBasicResultMap")
     List<RateDO> selectRateByMovieId(Integer id);
 

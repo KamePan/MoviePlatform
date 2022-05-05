@@ -22,4 +22,6 @@ public class UserDO {
     String desc;
 
     String role;
+
+    String avatar;
 }

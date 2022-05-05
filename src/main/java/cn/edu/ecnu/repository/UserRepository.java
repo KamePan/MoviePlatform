@@ -15,4 +15,8 @@ public interface UserRepository {
     List<UserDO> selectUserByUsername(String username);
 
     void insertUser(UserDO userDO);
+
+    void updateUserById(UserDO userDO);
+
+    UserDO selectUserById(Integer id);
 }

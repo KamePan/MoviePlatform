@@ -17,7 +17,7 @@ public class RateRepositoryTest {
 
     @Test
     public void selectRateByUserIdTest() {
-        List<RateDO> rateDOS = rateRepository.selectRateByUserId(153176);
+        List<RateDO> rateDOS = rateRepository.selectRateByUserIdOrderByRate(153176);
         System.out.println(rateDOS);
     }
 

@@ -9,39 +9,51 @@ public enum ResultCodeEnum {
      */
     SUCCESS(200, "success"),
 
+    /**
+     * 失败
+     */
     FAIL(500, "系统繁忙。。。"),
 
-    PARAM_ILEEGAL(401, "参数有误"),
+    /**
+     * 4xx 公共模块异常
+     */
+    PARAM_ILLEGAL(401, "参数有误"),
 
-    USER_NAME_INVALID(402, "账号输入非法"),
+    USERNAME_INVALID(402, "账号输入非法"),
 
-    USER_NAME_EXISTED(403, "账号已存在"),
+    PASSWORD_INVALID(403, "密码输入非法"),
 
-    USER_NAME_NOT_EXISTED(404, "账号不存在"),
+    USERNAME_EXISTED(404, "账号已存在"),
 
-    PASSWORD_NOT_MATCHED(405, "密码错误"),
+    USERNAME_NOT_EXISTED(405, "账号不存在"),
 
-    TIME_PARSE_ERROR(406, "时间解析错误"),
+    PASSWORD_NOT_MATCHED(406, "密码错误"),
 
-    START_TIME_AFTER_END_TIME(407, "开始时间晚于结束时间"),
+    /**
+     * 5xx 预约、咨询模块异常，包括访客、咨询师、督导相关
+     */
+    CONSULT_HAS_FINISHED(501, "咨询已结束"),
 
-    GOODS_NOT_EXISTED(408, "商品不存在"),
+    CONSULT_NOT_EXIST(502, "咨询不存在"),
 
-    ACTIVITY_NAME_EXISTED(409, "活动名已存在"),
+    CONSULT_TIME_INVALID(503, "咨询时间不合理"),
 
-    ACTIVITY_NOT_EXISTED(410, "活动不存在"),
+    /**
+     * 6xx 排班、审批、值班模块异常
+     */
+    ARRANGEMENT_TIME_INVALID(600, "排版时间不合理"),
 
-    ACTIVITY_NOT_START(411, "活动未开始"),
+    /**
+     * 7** 查询顾客、咨询师、督导接口调用错误
+     */
+    NOT_SUPERVISOR(701, "该用户不是督导"),
 
-    ACTIVITY_HAS_END(412, "活动已结束"),
+    NOT_COUNSELOR(702, "该用户不是咨询师"),
 
-    DRAW_CHANCE_NOT_ENOUGH(413, "抽奖次数不足"),
+    NOT_CUSTOMER(703, "该用户不是顾客"),
 
-    PRIZE_REVENTORY_EMPTY(414, "奖品已抽完"),
+    NOT_ADMIN(704, "该用户不是管理员");
 
-    PRIZE_NOT_HIT(415, "未中奖"),
-
-    Coupon_NOT_EXIST(416, "优惠券不存在");
     /**
      * 错误码
      */

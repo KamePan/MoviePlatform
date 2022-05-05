@@ -1,12 +1,19 @@
 package cn.edu.ecnu.controller;
 
+import cn.edu.ecnu.convertor.MovieConvertor;
 import cn.edu.ecnu.convertor.RateConvertor;
+import cn.edu.ecnu.convertor.UserConvertor;
+import cn.edu.ecnu.model.entity.Movie;
 import cn.edu.ecnu.model.entity.Rate;
 import cn.edu.ecnu.model.entity.Stat;
+import cn.edu.ecnu.model.entity.User;
 import cn.edu.ecnu.model.request.RateModifyRequest;
 import cn.edu.ecnu.model.response.RateQueryResponse;
 import cn.edu.ecnu.model.response.RateStatResponse;
+import cn.edu.ecnu.model.response.UserQueryResponse;
+import cn.edu.ecnu.service.MovieService;
 import cn.edu.ecnu.service.RateService;
+import cn.edu.ecnu.service.UserService;
 import cn.edu.ecnu.util.Result;
 import cn.edu.ecnu.util.ResultGenerator;
 import io.swagger.annotations.ApiOperation;
@@ -23,13 +30,39 @@ public class RateController {
     @Autowired
     private RateService rateService;
 
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private MovieService movieService;
+
     @ApiOperation("根据用户 ID 返回用户全部评分")
-    @GetMapping("/user/{id}")
-    public Result<List<RateQueryResponse>> queryRateByUserId(@PathVariable Integer id) {
-        List<Rate> rates = rateService.queryRateByUserId(id);
+    @GetMapping("/user/rate/{id}")
+    public Result<List<RateQueryResponse>> queryRateByUserIdOrderByRate(@PathVariable Integer id) {
+        List<Rate> rates = rateService.queryRateByUserIdOrderByRate(id);
         List<RateQueryResponse> rateQueryResponses = rates.stream()
-                .map(RateConvertor::convertEntityToResponse)
-                .collect(Collectors.toList());
+                .map(rate -> {
+                    Integer movieId = rate.getMovieId();
+                    RateQueryResponse rateQueryResponse = RateConvertor.convertEntityToResponse(rate);
+                    Movie movie = movieService.queryMovieInfoByMovieId(movieId);
+                    rateQueryResponse.setMovie(MovieConvertor.convertEntityToResponse(movie));
+                    return rateQueryResponse;
+                }).collect(Collectors.toList());
+        return ResultGenerator.genSuccessResult(rateQueryResponses);
+    }
+
+    @ApiOperation("根据用户 ID 返回用户全部评分")
+    @GetMapping("/user/time/{id}")
+    public Result<List<RateQueryResponse>> queryRateByUserIdOrderByTime(@PathVariable Integer id) {
+        List<Rate> rates = rateService.queryRateByUserIdOrderByTime(id);
+        List<RateQueryResponse> rateQueryResponses = rates.stream()
+                .map(rate -> {
+                    Integer movieId = rate.getMovieId();
+                    RateQueryResponse rateQueryResponse = RateConvertor.convertEntityToResponse(rate);
+                    Movie movie = movieService.queryMovieInfoByMovieId(movieId);
+                    rateQueryResponse.setMovie(MovieConvertor.convertEntityToResponse(movie));
+                    return rateQueryResponse;
+                }).collect(Collectors.toList());
         return ResultGenerator.genSuccessResult(rateQueryResponses);
     }
 
@@ -38,20 +71,23 @@ public class RateController {
     public Result<List<RateQueryResponse>> queryRateByMovieId(@PathVariable Integer id) {
         List<Rate> rates = rateService.queryRateByMovieId(id);
         List<RateQueryResponse> rateQueryResponses = rates.stream()
-                .map(RateConvertor::convertEntityToResponse)
+                .map(rate -> {
+                    RateQueryResponse rateQueryResponse = RateConvertor.convertEntityToResponse(rate);
+                    User user = userService.queryUserById(rate.getUserId());
+                    rateQueryResponse.setUser(UserConvertor.convertEntityToResponse(user));
+                    return rateQueryResponse;
+                })
                 .collect(Collectors.toList());
         return ResultGenerator.genSuccessResult(rateQueryResponses);
     }
 
     @ApiOperation("根据电影 ID 及用户 ID 返回当前用户对当前电影评分")
     @GetMapping("/movie_user")
-    public Result<List<RateQueryResponse>> queryRateByUserAndMovieId(@RequestParam("user_id") Integer userId,
-                                                               @RequestParam("movie_id") Integer movieId) {
-        List<Rate> rates = rateService.queryRateByUserAndMovieId(userId, movieId);
-        List<RateQueryResponse> rateQueryResponses = rates.stream()
-                .map(RateConvertor::convertEntityToResponse)
-                .collect(Collectors.toList());
-        return ResultGenerator.genSuccessResult(rateQueryResponses);
+    public Result<RateQueryResponse> queryRateByUserAndMovieId(@RequestParam("userId") Integer userId,
+                                                               @RequestParam("movieId") Integer movieId) {
+        Rate rate = rateService.queryRateByUserAndMovieId(userId, movieId);
+        RateQueryResponse rateQueryResponse = RateConvertor.convertEntityToResponse(rate);
+        return ResultGenerator.genSuccessResult(rateQueryResponse);
     }
 
     @ApiOperation("添加用户对电影评分数据")
