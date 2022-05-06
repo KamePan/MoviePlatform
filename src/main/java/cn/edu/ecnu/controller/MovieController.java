@@ -1,7 +1,9 @@
 package cn.edu.ecnu.controller;
 
 import cn.edu.ecnu.convertor.MovieConvertor;
+import cn.edu.ecnu.exception.CustomizeException;
 import cn.edu.ecnu.model.entity.Movie;
+import cn.edu.ecnu.model.enums.ResultCodeEnum;
 import cn.edu.ecnu.model.request.MovieSearchRequest;
 import cn.edu.ecnu.model.response.MovieQueryResponse;
 import cn.edu.ecnu.service.MovieService;
@@ -13,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Api("电影信息 Controller")
@@ -51,11 +54,13 @@ public class MovieController {
         return ResultGenerator.genSuccessResult(movieQueryResponses);
     }
 
-    @ApiOperation("根据条件搜索电影")
+    @ApiOperation("根据条件分页搜索电影")
     @GetMapping("/search")
-    public Result queryMovieSelective( MovieSearchRequest movieSearchRequest) {
-        Movie movie = MovieConvertor.convertRequestToEntity(movieSearchRequest);
-        List<Movie> movies = movieService.queryMovieSelective(movie);
+    public Result pageQueryMovieSelective(MovieSearchRequest movieSearchRequest) {
+        if (Objects.isNull(movieSearchRequest) || Objects.isNull(movieSearchRequest.getPageNumber()) || Objects.isNull(movieSearchRequest.getPageSize())) {
+            throw new CustomizeException(ResultCodeEnum.PARAM_ILLEGAL);
+        }
+        List<Movie> movies = movieService.pageQueryMovieSelective(movieSearchRequest);
         List<MovieQueryResponse> movieQueryResponses = movies.stream()
                 .map(MovieConvertor::convertEntityToResponse)
                 .collect(Collectors.toList());

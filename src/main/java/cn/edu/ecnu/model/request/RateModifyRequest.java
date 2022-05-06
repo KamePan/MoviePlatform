@@ -9,10 +9,10 @@ public class RateModifyRequest {
     @JsonProperty("id")
     Integer id;
 
-    @JsonProperty("user_id")
+    @JsonProperty("userId")
     Integer userId;
 
-    @JsonProperty("movie_id")
+    @JsonProperty("movieId")
     Integer movieId;
 
     @JsonProperty("rate")

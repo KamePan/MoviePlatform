@@ -12,4 +12,8 @@ public class MovieSearchRequest {
     String category;
 
     String language;
+
+    Integer pageNumber;
+
+    Integer pageSize;
 }

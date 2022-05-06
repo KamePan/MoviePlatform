@@ -3,8 +3,10 @@ package cn.edu.ecnu.service;
 import cn.edu.ecnu.convertor.MovieConvertor;
 import cn.edu.ecnu.model.dataobject.MovieDO;
 import cn.edu.ecnu.model.entity.Movie;
+import cn.edu.ecnu.model.request.MovieSearchRequest;
 import cn.edu.ecnu.repository.MovieRepository;
 import cn.edu.ecnu.repository.RateRepository;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -78,9 +80,13 @@ public class MovieService {
         }
     }
 
-    public List<Movie> queryMovieSelective(Movie movie) {
-        MovieDO movieDO = MovieConvertor.convertEntityToDO(movie);
-        List<MovieDO> movieDOS = movieRepository.selectMovieSelective(movieDO);
+    public List<Movie> pageQueryMovieSelective(MovieSearchRequest movieSearchRequest) {
+        Integer pageSize = movieSearchRequest.getPageSize();
+        Integer pageNumber = movieSearchRequest.getPageNumber();
+        Integer offset = (pageNumber - 1) * pageSize;
+        MovieDO movieDO = new MovieDO();
+        BeanUtils.copyProperties(movieSearchRequest, movieDO);
+        List<MovieDO> movieDOS = movieRepository.selectMovieSelective(movieDO, offset, pageSize);
         List<Movie> movies = movieDOS.stream()
                 .map(MovieConvertor::convertDOToEntity)
                 .collect(Collectors.toList());

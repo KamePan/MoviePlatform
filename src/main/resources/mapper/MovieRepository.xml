@@ -92,25 +92,28 @@
             resultMap="MovieBindActorDirectorResultMap" >
         SELECT
             <include refid="Movie_Column_List"></include>
-        FROM movie
+        FROM (SELECT * FROM movie
+                <where>
+                    <if test="movieDO.title != null">
+                        AND title LIKE CONCAT('%', #{movieDO.title}, '%')
+                    </if>
+                    <if test="movieDO.category != null">
+                        AND category LIKE CONCAT('%', #{movieDO.category}, '%')
+                    </if>
+                    <if test="movieDO.language != null">
+                        AND `language` LIKE CONCAT('%', #{movieDO.language}, '%')
+                    </if>
+                    <if test="movieDO.district != null">
+                        AND district LIKE CONCAT('%', #{movieDO.district}, '%')
+                    </if>
+                </where>
+                LIMIT #{offset}, #{pageSize}
+            ) as movie
             LEFT OUTER JOIN act on movie.id = act.movie_id
             LEFT OUTER JOIN actor on actor.id = act.actor_id
             LEFT OUTER JOIN direct on  movie.id = direct.movie_id
             LEFT OUTER JOIN director on direct.director_id = director.id
-        <where>
-            <if test="title != null">
-                AND title LIKE CONCAT('%', #{title}, '%')
-            </if>
-            <if test="category != null">
-                AND category LIKE CONCAT('%', #{category}, '%')
-            </if>
-            <if test="language != null">
-                AND `language` LIKE CONCAT('%', #{language}, '%')
-            </if>
-            <if test="district != null">
-                AND district LIKE CONCAT('%', #{district}, '%')
-            </if>
-        </where>
+
     </select>
 
     <select id="selectMovieByScoreDesc"

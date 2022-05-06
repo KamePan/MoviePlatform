@@ -9,11 +9,12 @@
         <result column="email" property="email" jdbcType="VARCHAR" />
         <result column="gender" property="gender" jdbcType="INTEGER" />
         <result column="desc" property="desc" jdbcType="VARCHAR" />
+        <result column="avatar" property="avatar" jdbcType="VARCHAR" />
         <result column="birthday" property="birthday" jdbcType="TIMESTAMP" />
     </resultMap>
 
     <sql id="UserColumnList" >
-        id, `username`, `password`, birthday, email, `desc`, gender, `role`
+        id, `username`, `password`, birthday, email, `desc`, gender, `role`, avatar
     </sql>
 
     <insert id="insertBatchUsers" parameterType="java.util.List">

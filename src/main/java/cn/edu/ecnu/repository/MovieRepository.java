@@ -18,7 +18,7 @@ public interface MovieRepository {
 
     List<MovieDO> selectAllMovies();
 
-    List<MovieDO> selectMovieSelective(MovieDO movieDO);
+    List<MovieDO> selectMovieSelective(MovieDO movieDO, Integer offset, Integer pageSize);
 
     List<MovieDO> selectMovieByScoreDesc(Integer size);
 }
