@@ -1,7 +1,6 @@
 package cn.edu.ecnu.config;
 
 import cn.edu.ecnu.filter.JWTAuthenticationEntryPoint;
-import cn.edu.ecnu.filter.JWTAuthenticationFilter;
 import cn.edu.ecnu.filter.JWTAuthorizationFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -65,7 +64,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.DELETE, "/tasks/**").hasRole("ADMIN")
                 .anyRequest().permitAll()
                 .and()
-                .addFilter(new JWTAuthenticationFilter(authenticationManager()))
                 .addFilter(new JWTAuthorizationFilter(authenticationManager()))
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()

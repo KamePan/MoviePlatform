@@ -7,6 +7,8 @@ import cn.edu.ecnu.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class UserService {
 
@@ -25,6 +27,15 @@ public class UserService {
 
     public User queryUserById(Integer id) {
         UserDO userDO = userRepository.selectUserById(id);
+        return UserConvertor.convertDOToEntity(userDO);
+    }
+
+    public User queryUserByUsername(String username) {
+        List<UserDO> userDOS = userRepository.selectUserByUsername(username);
+        if (userDOS.isEmpty()) {
+            return null;
+        }
+        UserDO userDO = userDOS.get(0);
         return UserConvertor.convertDOToEntity(userDO);
     }
 }
