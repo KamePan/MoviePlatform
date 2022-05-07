@@ -32,16 +32,16 @@ public class MovieConvertor {
         Movie movie = new Movie();
         BeanUtils.copyProperties(movieDO, movie);
         if (movieDO.getCategory() != null)
-            movie.setCategory(Arrays.stream(StringUtils.split(movieDO.getCategory() , ", "))
+            movie.setCategory(Arrays.stream(movieDO.getCategory().split(", "))
                     .collect(Collectors.toList()));
         if (movieDO.getComposer() != null)
-            movie.setComposer(Arrays.stream(StringUtils.split(movieDO.getComposer(), ", "))
+            movie.setComposer(Arrays.stream(movieDO.getComposer().split(", "))
                     .collect(Collectors.toList()));
         if (movieDO.getDistrict() != null)
-            movie.setDistrict(Arrays.stream(StringUtils.split(movieDO.getDistrict(), ", "))
+            movie.setDistrict(Arrays.stream(movieDO.getDistrict().split(", "))
                     .collect(Collectors.toList()));
         if (movieDO.getLanguage() != null)
-            movie.setLanguage(Arrays.stream(StringUtils.split(movieDO.getLanguage(), ", "))
+            movie.setLanguage(Arrays.stream(movieDO.getLanguage().split(", "))
                     .collect(Collectors.toList()));
         if (movieDO.getOthername() != null)
             movie.setOthername(Arrays.stream(StringUtils.split(movieDO.getOthername(), ", "))
